@@ -34,12 +34,17 @@ class StoryGenerator:
   @classmethod
   def _get_llm(cls):
     serviceurl = os.getenv("CHOREO_OPENAI_CONNECTION_SERVICEURL")
-    token = cls._get_oauth_token
+    choreo_api_key = os.getenv("CHOREO_OPENAI_CONNECTION_CHOREOAPIKEY")
+
+    if not serviceurl or not choreo_api_key:
+      raise ValueError("Choreo OpenAI connection not injected properly")
+    #token = cls._get_oauth_token
 
     return ChatOpenAI(
        model="gpt-4.1-mini",
-       api_key=token,
-       base_url=serviceurl
+       #api_key=token,
+       base_url=serviceurl,
+       api_key=choreo_api_key
     )
   
 
