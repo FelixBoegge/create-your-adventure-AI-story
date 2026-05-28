@@ -8,6 +8,7 @@ from core.prompts import STORY_PROMPT
 from core.models import StoryLLMResponse, StoryNodeLLM
 from models.story import Story, StoryNode
 from dotenv import load_dotenv
+import os, requests
 
 
 load_dotenv()
@@ -15,9 +16,33 @@ load_dotenv()
 class StoryGenerator:
 
   @classmethod
+  def _get_oauth_token(cls):
+    consumerkey = os.getenv("CHOREO_OPENAI_CONNECTION_CONSUMERKEY")
+    consumersecret = os.getenv("CHOREO_OPENAI_CONNECTION_CONSUMERSECRET")
+    tokenurl = os.getenv("CHOREO_OPENAI_CONNECTION_TOKENURL")
+
+    response = requests.post(
+       tokenurl,
+       data={"grant_type": "client_credentials"},
+       auth=(consumerkey, consumersecret)
+    )
+
+    response.raise_for_status()
+    return response.json()["access_token"]
+
+
+  @classmethod
   def _get_llm(cls):
-    return ChatOpenAI(model="gpt-4.1-mini")
+    serviceurl = os.getenv("CHOREO_OPENAI_CONNECTION_SERVICEURL")
+    token = cls._get_oauth_token
+
+    return ChatOpenAI(
+       model="gpt-4.1-mini",
+       api_key=token,
+       base_url=serviceurl
+    )
   
+
   @classmethod
   def generate_story(cls, db: Session, session_id: str, theme: str = "fantasy") -> Story:
     llm = cls._get_llm()
