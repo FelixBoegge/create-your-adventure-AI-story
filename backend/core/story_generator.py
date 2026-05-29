@@ -16,39 +16,19 @@ load_dotenv()
 class StoryGenerator:
 
   @classmethod
-  def _get_oauth_token(cls):
-    consumerkey = os.getenv("CHOREO_OPENAI_CONNECTION_CONSUMERKEY")
-    consumersecret = os.getenv("CHOREO_OPENAI_CONNECTION_CONSUMERSECRET")
-    tokenurl = os.getenv("CHOREO_OPENAI_CONNECTION_TOKENURL")
-
-    response = requests.post(
-       tokenurl,
-       data={"grant_type": "client_credentials"},
-       auth=(consumerkey, consumersecret)
-    )
-
-    response.raise_for_status()
-    return response.json()["access_token"]
-
-
-  @classmethod
   def _get_llm(cls):
     serviceurl = os.getenv("CHOREO_OPENAI_CONNECTION_SERVICEURL")
     choreo_api_key = os.getenv("CHOREO_OPENAI_CONNECTION_CHOREOAPIKEY")
 
-    print("SERVICE URL:", serviceurl)
-    print("CHOREO API KEY:", bool(choreo_api_key))
-
     if not serviceurl or not choreo_api_key:
       raise ValueError("Choreo OpenAI connection not injected properly")
-    #token = cls._get_oauth_token
 
     return ChatOpenAI(
        model="gpt-4.1-mini",
-       #api_key=token,
        base_url=serviceurl,
        api_key=choreo_api_key
     )
+  
   
 
   @classmethod
