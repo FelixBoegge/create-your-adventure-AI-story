@@ -36,6 +36,9 @@ class StoryGenerator:
     serviceurl = os.getenv("CHOREO_OPENAI_CONNECTION_SERVICEURL")
     choreo_api_key = os.getenv("CHOREO_OPENAI_CONNECTION_CHOREOAPIKEY")
 
+    print("SERVICE URL:", serviceurl)
+    print("CHOREO API KEY:", bool(choreo_api_key))
+
     if not serviceurl or not choreo_api_key:
       raise ValueError("Choreo OpenAI connection not injected properly")
     #token = cls._get_oauth_token
