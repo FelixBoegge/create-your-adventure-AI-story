@@ -20,7 +20,7 @@ class StoryGenerator:
     serviceurl = os.getenv("CHOREO_OPENAI_CONNECTION_SERVICEURL")
 
     if not serviceurl:
-      raise ValueError("Missing Service URL")
+      raise ValueError("Missing Choreo Service URL")
 
     return ChatOpenAI(
       model="gpt-4.1-mini",
