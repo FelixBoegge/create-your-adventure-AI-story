@@ -16,16 +16,46 @@ load_dotenv()
 class StoryGenerator:
 
   @classmethod
+  def _get_choreo_access_token(cls):
+    """Fetches a valid OAuth2 token from the Choreo Token endpoint."""
+    token_url = os.getenv("CHOREO_OPENAI_CONNECTION_TOKENURL")
+    consumer_key = os.getenv("CHOREO_OPENAI_CONNECTION_CONSUMERKEY")
+    consumer_secret = os.getenv("CHOREO_OPENAI_CONNECTION_CONSUMERSECRET")
+
+    if not all([token_url, consumer_key, consumer_secret]):
+      raise ValueError("Missing critical Choreo OAuth configuration variables.")
+
+    # Call Choreo token service using OAuth2 Client Credentials
+    response = requests.post(
+      token_url,
+      data={"grant_type": "client_credentials"},
+      auth=(consumer_key, consumer_secret),
+      headers={"Content-Type": "application/x-www-form-urlencoded"}
+    )
+
+    if response.status_code != 200:
+      raise Exception(f"Failed to fetch token from Choreo: {response.text}")
+            
+    return response.json().get("access_token")
+
+
+  @classmethod
   def _get_llm(cls):
     serviceurl = os.getenv("CHOREO_OPENAI_CONNECTION_SERVICEURL")
+    choreo_api_key = os.getenv("CHOREO_OPENAI_CONNECTION_CHOREOAPIKEY") # Check if provided by platform
 
     if not serviceurl:
       raise ValueError("Missing Choreo Service URL")
+    
+    oauth_token = cls._get_choreo_access_token()
 
     return ChatOpenAI(
-      model="gpt-4.1-mini",
+      model="gpt-4o-mini",
       base_url=serviceurl,
-      api_key="dummy"
+      api_key=oauth_token,
+      default_headers={
+        "Choreo-API-Key": choreo_api_key if choreo_api_key else ""
+      }
     )
   
 
