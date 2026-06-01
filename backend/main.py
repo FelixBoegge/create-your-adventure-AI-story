@@ -4,8 +4,19 @@ from fastapi.middleware.cors import CORSMiddleware
 from core.config import settings
 from routers import story, job
 from db.database import create_tables
+import time
 
-create_tables()
+
+for attempt in range(5):
+  try:
+    create_tables()
+    print("DB connected and tables verified successfully.")
+    break
+  except Exception as e:
+    print(f"DB connection attempt {attempt} failed: {e}. Retrying in 5 seconds.")
+    time.sleep(5)
+else:
+  raise RuntimeError("Could not connect to DB after 5 attempts.")
 
 
 app = FastAPI(
