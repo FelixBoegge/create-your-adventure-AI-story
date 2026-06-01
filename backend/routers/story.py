@@ -18,44 +18,6 @@ router = APIRouter(
   tags=["stories"]
 )
 
-@router.get("/test-openai")
-def test_openai():
-
-    serviceurl = os.getenv("CHOREO_OPENAI_CONNECTION_SERVICEURL")
-    api_key = os.getenv("CHOREO_OPENAI_CONNECTION_CHOREOAPIKEY")
-
-    if not serviceurl:
-        return {"error": "SERVICEURL missing"}
-
-    if not api_key:
-        return {"error": "CHOREOAPIKEY missing"}
-
-    headers = {
-        "Choreo-API-Key": api_key,
-        "Content-Type": "application/json"
-    }
-
-    payload = {
-        "model": "gpt-4.1-mini",
-        "messages": [
-            {
-                "role": "user",
-                "content": "Say hello"
-            }
-        ]
-    }
-
-    response = requests.post(
-        f"{serviceurl}/chat/completions",
-        headers=headers,
-        json=payload,
-        timeout=60
-    )
-
-    return {
-        "status_code": response.status_code,
-        "response": response.text
-    }
 
 def get_session_id(session_id: Optional[str] = Cookie(None)):
   if not session_id:
