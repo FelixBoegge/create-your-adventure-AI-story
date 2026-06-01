@@ -10,7 +10,6 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 def init_db():
-  """Initializes the engine safely when explicitly called at startup."""
   global engine, SessionLocal
   if engine is None:
     engine = create_engine(
@@ -21,7 +20,6 @@ def init_db():
         "connect_timeout": 10
       }
     )
-    # Bind the engine to our sessionmaker dynamically
     SessionLocal.configure(bind=engine)
 
 
