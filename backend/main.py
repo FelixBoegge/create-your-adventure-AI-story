@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from core.config import settings
 from routers import story, job
 from db.database import create_tables, init_db
-import time
+import asyncio
 from contextlib import asynccontextmanager
 
 
@@ -20,7 +20,7 @@ async def lifespan(app: FastAPI):
       break
     except Exception as e:
       print(f"DB connection attempt {attempt} failed: {e}. Retrying in 5 seconds.")
-      time.sleep(5)
+      await asyncio.sleep(5)
   else:
     raise RuntimeError("Could not connect to DB after 5 attempts.")
   
