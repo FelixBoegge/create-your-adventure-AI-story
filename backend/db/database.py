@@ -5,20 +5,28 @@ from sqlalchemy.ext.declarative import declarative_base
 from core.config import settings
 
 
-engine = create_engine(
-  settings.DATABASE_URL,
-  pool_pre_ping=True,
-  pool_recycle=1800,
-  connect_args={
-    "connect_timeout": 10
-  }
-)
-
+engine = None
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
 Base = declarative_base()
 
+def init_db():
+  """Initializes the engine safely when explicitly called at startup."""
+  global engine, SessionLocal
+  if engine is None:
+    engine = create_engine(
+      settings.DATABASE_URL,
+      pool_pre_ping=True,
+      pool_recycle=1800,
+      connect_args={
+        "connect_timeout": 10
+      }
+    )
+    # Bind the engine to our sessionmaker dynamically
+    SessionLocal.configure(bind=engine)
+
+
 def get_db():
+  init_db()
   db = SessionLocal()
   try:
     yield db
@@ -26,4 +34,5 @@ def get_db():
     db.close()
 
 def create_tables():
+  init_db()
   Base.metadata.create_all(bind=engine)
