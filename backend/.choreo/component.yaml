@@ -1,15 +1,36 @@
-schemaVersion: "1.1"
+schemaVersion: "1.2"
 endpoints:
-  - name: rest-api-be2
-    displayName: REST API
-    service:
-      basePath: /
-      port: 8000
-    type: REST
-    networkVisibilities:
-      - Project
-      - Public
+    - name: rest-api-be2
+      displayName: REST API
+      service:
+        basePath: /
+        port: 8000
+      type: REST
+      networkVisibilities:
+        - Project
+        - Public
 dependencies:
   connectionReferences:
     - name: openai-connection
       resourceRef: service:/create-your-adventure/openai/v1/proxy/PROJECT
+      env:
+        - name: CHOREO_OPENAI_CONNECTION_SERVICEURL
+          valueFrom:
+            connectionRef:
+              name: openai-connection
+              key: ServiceURL
+        - name: CHOREO_OPENAI_CONNECTION_CONSUMERKEY
+          valueFrom:
+            connectionRef:
+              name: openai-connection
+              key: ConsumerKey
+        - name: CHOREO_OPENAI_CONNECTION_CONSUMERSECRET
+          valueFrom:
+            connectionRef:
+              name: openai-connection
+              key: ConsumerSecret
+        - name: CHOREO_OPENAI_CONNECTION_TOKENURL
+          valueFrom:
+            connectionRef:
+              name: openai-connection
+              key: TokenURL
