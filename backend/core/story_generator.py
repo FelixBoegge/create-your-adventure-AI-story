@@ -8,7 +8,7 @@ from core.prompts import STORY_PROMPT
 from core.models import StoryLLMResponse, StoryNodeLLM
 from models.story import Story, StoryNode
 from dotenv import load_dotenv
-import os, requests
+import os
 
 
 load_dotenv()

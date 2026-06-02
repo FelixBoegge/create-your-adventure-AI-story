@@ -3,27 +3,13 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from core.config import settings
 from routers import story, job
-from db.database import create_tables, init_db
-import asyncio
 from contextlib import asynccontextmanager
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-  print("Container booted successfully. Initiating database connection...")
-
-  for attempt in range(5):
-    try:
-      init_db()
-      create_tables()
-      print("DB connected and tables verified successfully.")
-      break
-    except Exception as e:
-      print(f"DB connection attempt {attempt} failed: {e}. Retrying in 5 seconds.")
-      await asyncio.sleep(5)
-  else:
-    raise RuntimeError("Could not connect to DB after 5 attempts.")
-  
+  # App starts instantly. Tables will generate dynamically on demand.
+  print("Container booted and web route listener active.")
   yield
   print("Shutting down container application.")
 
