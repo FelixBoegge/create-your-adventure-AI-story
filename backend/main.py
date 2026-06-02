@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from core.config import settings
 from routers import story, job
+from db.database import create_tables
 from contextlib import asynccontextmanager
 
 
@@ -10,6 +11,7 @@ from contextlib import asynccontextmanager
 async def lifespan(app: FastAPI):
   # App starts instantly. Tables will generate dynamically on demand.
   print("Container booted and web route listener active.")
+  create_tables()
   yield
   print("Shutting down container application.")
 
