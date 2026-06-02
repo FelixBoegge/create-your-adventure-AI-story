@@ -4,8 +4,24 @@ from fastapi.middleware.cors import CORSMiddleware
 from core.config import settings
 from routers import story, job
 from db.database import create_tables
+import logging
+from contextlib import asynccontextmanager
 
-create_tables()
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    logging.info("Choreo container booting up...")
+    try:
+      create_tables()
+      logging.info("Database tables verified successfully.")
+    except Exception as e:
+      logger.error(f"Database table verification skipped on startup: {e}")
+      logger.info("Continuing startup sequence so the container stays healthy.")
+    yield
+    logger.info("Shutting down container application.")
 
 app = FastAPI(
     title="Choose Your Own Adventure Game API",
@@ -13,6 +29,7 @@ app = FastAPI(
     version="0.1.0",
     docs_url="/docs",
     redoc_url="/redoc",
+    lifespan=lifespan
 )
 
 app.add_middleware(
