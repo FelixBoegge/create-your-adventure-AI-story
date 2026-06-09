@@ -61,8 +61,8 @@ jobs:
         uses: aws-actions/aws-elasticbeanstalk-deploy@v1.0.0
         with:
           aws-region: ${{ env.AWS_REGION }}
-          application-name: ${{ env.AWS_APPLICATION_NAME }}
-          environment-name: ${{ env.AWS_ENVIRONMENT_NAME }}
+          application-name: ${{ env.APPLICATION_NAME }}
+          environment-name: ${{ env.ENVIRONMENT_NAME }}
           deployment-package-path: deploy.zip
           solution-stack-name: "64bit Amazon Linux 2023 v4.13.1 running Python 3.14"
           option-settings: |
