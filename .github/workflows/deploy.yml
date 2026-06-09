@@ -80,6 +80,6 @@ jobs:
               {
                 "Namespace": "aws:ec2:instances",
                 "OptionName": "InstanceTypes",
-                "Value": "t2.micro"
+                "Value": "t3.micro"
               }
             ]
