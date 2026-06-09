@@ -4,6 +4,10 @@ import os
 
 
 class Settings(BaseSettings):
+
+  APP_TITLE: str = "Choose Your Own Adventure Game API"
+  APP_DESCRIPTION: str = "api to generate cool stories"
+
   API_PREFIX: str = "/api"
   DEBUG: bool = False
 

@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from core.config import settings
-from routers import story, job
+from routers import story, job, test
 from db.database import create_tables
 import logging
 from contextlib import asynccontextmanager
@@ -24,8 +24,8 @@ async def lifespan(app: FastAPI):
     logger.info("Shutting down container application.")
 
 app = FastAPI(
-    title="Choose Your Own Adventure Game API",
-    description="api to generate cool stories",
+    title=settings.APP_TITLE,
+    description=settings.APP_DESCRIPTION,
     version="0.1.0",
     docs_url="/docs",
     redoc_url="/redoc",
@@ -42,6 +42,7 @@ app.add_middleware(
 
 app.include_router(story.router, prefix=settings.API_PREFIX)
 app.include_router(job.router, prefix=settings.API_PREFIX)
+app.include_router(test.router, prefix=settings.API_PREFIX)
 
 if __name__ == "__main__":
     import uvicorn
