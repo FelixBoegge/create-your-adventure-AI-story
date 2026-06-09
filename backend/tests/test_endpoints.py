@@ -12,7 +12,7 @@ def test_health_check():
   assert response.status_code == 200
   data = response.json()
   assert data["status"] == "healthy"
-  assert data["version"] == "1.0.0"
+  assert data["version"] == "1.1.0"
 
 
 def test_read_item():
