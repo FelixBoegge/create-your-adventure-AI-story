@@ -53,16 +53,16 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: $
-          aws-secret-access-key: $
-          aws-region: $
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Deploy to Elastic Beanstalk
         uses: aws-actions/aws-elasticbeanstalk-deploy@v1.0.0
         with:
-          aws-region: $
-          application-name: $
-          environment-name: $
+          aws-region: ${{ env.AWS_REGION }}
+          application-name: ${{ env.AWS_APPLICATION_NAME }}
+          environment-name: ${{ env.AWS_ENVIRONMENT_NAME }}
           deployment-package-path: deploy.zip
           solution-stack-name: "64bit Amazon Linux 2023 v4.13.1 running Python 3.14"
           option-settings: |
