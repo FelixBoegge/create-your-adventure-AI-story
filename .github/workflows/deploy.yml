@@ -69,6 +69,11 @@ jobs:
           option-settings: |
             [
               {
+                "Namespace": "aws:elasticbeanstalk:environment",
+                "OptionName": "EnvironmentType",
+                "Value": "SingleInstance"
+              },
+              {
                 "Namespace": "aws:autoscaling:launchconfiguration",
                 "OptionName": "IamInstanceProfile",
                 "Value": "aws-elasticbeanstalk-ec2-role"
