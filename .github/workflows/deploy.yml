@@ -82,4 +82,53 @@ jobs:
                 "OptionName": "InstanceTypes",
                 "Value": "t3.micro"
               }
+              ```yaml
+
+          option-settings: |
+            [
+              {
+                "Namespace": "aws:autoscaling:launchconfiguration",
+                "OptionName": "IamInstanceProfile",
+                "Value": "aws-elasticbeanstalk-ec2-role"
+              },
+              {
+                "Namespace": "aws:elasticbeanstalk:environment",
+                "OptionName": "ServiceRole",
+                "Value": "aws-elasticbeanstalk-service-role"
+              },
+              {
+                "Namespace": "aws:ec2:instances",
+                "OptionName": "InstanceTypes",
+                "Value": "t3.micro"
+              },
+              {
+                "Namespace": "aws:elasticbeanstalk:application:environment",
+                "OptionName": "DB_USER",
+                "Value": "${{ secrets.RDS_DB_USER }}"
+              },
+              {
+                "Namespace": "aws:elasticbeanstalk:application:environment",
+                "OptionName": "DB_PASSWORD",
+                "Value": "${{ secrets.RDS_DB_PASSWORD }}"
+              },
+              {
+                "Namespace": "aws:elasticbeanstalk:application:environment",
+                "OptionName": "DB_HOST",
+                "Value": "${{ secrets.RDS_DB_HOST }}"
+              },
+              {
+                "Namespace": "aws:elasticbeanstalk:application:environment",
+                "OptionName": "DB_PORT",
+                "Value": "${{ secrets.RDS_DB_PORT }}"
+              },
+              {
+                "Namespace": "aws:elasticbeanstalk:application:environment",
+                "OptionName": "DB_NAME",
+                "Value": "${{ secrets.RDS_DB_NAME }}"
+              },
+              {
+                "Namespace": "aws:elasticbeanstalk:application:environment",
+                "OptionName": "DEBUG",
+                "Value": "False"
+              }
             ]
