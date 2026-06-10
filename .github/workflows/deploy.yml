@@ -117,7 +117,10 @@ jobs:
                 "Namespace": "aws:elasticbeanstalk:application:environment",
                 "OptionName": "OPENAI_API_KEY",
                 "Value": "${{ secrets.OPENAI_API_KEY }}"
+              },
+              {
+                "Namespace": "aws:elasticbeanstalk:application:environment",
+                "OptionName": "ALLOWED_ORIGINS",
+                "Value": "http://localhost:5173,https://main.d16pgqx8moz4cv.amplifyapp.com"
               }
-
-
             ]

@@ -1,1 +1,1 @@
-export const API_BASE_URL = "/choreo-apis/create-your-adventure/backend/v1/api"
+export const API_BASE_URL = import.meta.env.VITE_BASE_URL || "https://interactive-adventure-game-env.eu-central-1.elasticbeanstalk.com/api"
