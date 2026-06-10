@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logging.info("Choreo container booting up...")
+    logging.info("Container booting up...")
     try:
       create_tables()
       logging.info("Database tables verified successfully.")
