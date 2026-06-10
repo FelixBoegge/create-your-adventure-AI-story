@@ -81,25 +81,6 @@ jobs:
                 "Namespace": "aws:ec2:instances",
                 "OptionName": "InstanceTypes",
                 "Value": "t3.micro"
-              }
-              ```yaml
-
-          option-settings: |
-            [
-              {
-                "Namespace": "aws:autoscaling:launchconfiguration",
-                "OptionName": "IamInstanceProfile",
-                "Value": "aws-elasticbeanstalk-ec2-role"
-              },
-              {
-                "Namespace": "aws:elasticbeanstalk:environment",
-                "OptionName": "ServiceRole",
-                "Value": "aws-elasticbeanstalk-service-role"
-              },
-              {
-                "Namespace": "aws:ec2:instances",
-                "OptionName": "InstanceTypes",
-                "Value": "t3.micro"
               },
               {
                 "Namespace": "aws:elasticbeanstalk:application:environment",
