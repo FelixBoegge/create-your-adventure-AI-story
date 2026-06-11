@@ -13,7 +13,7 @@ class Settings(BaseSettings):
 
   DATABASE_URL: str = None
 
-  ALLOWED_ORIGINS: str = ""
+  ALLOWED_ORIGINS: any = ""
 
   OPENAI_API_KEY: str
 
@@ -28,7 +28,9 @@ class Settings(BaseSettings):
       self.DATABASE_URL = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
 
   @field_validator("ALLOWED_ORIGINS")
-  def parse_allowed_origins(cls, v: str) -> list[str]:
+  def parse_allowed_origins(cls, v: any) -> list[str]:
+    if isinstance(v, list):
+      return v
     return v.split("," if v else [])
   
   class Config:
