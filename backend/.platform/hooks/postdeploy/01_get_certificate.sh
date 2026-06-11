@@ -25,10 +25,24 @@ fi
 # 2. ALWAYS recreate the custom Nginx SSL configuration (since EB overwrites conf.d on every deploy!)
 echo "Applying Nginx SSL configuration..."
 
-# This Base64 string decodes exactly into your secure Nginx block
-NGINX_CONF_B64="c2VydmVyIHsKICAgIGxpc3RlbiA0NDMgc3NsOwogICAgc2VydmVyX25hbWUgYXBpLmFkdmVudHVyZS1zdG9yeS1nZW5lcmF0b3IueHl6OwoKICAgIHNzbF9jZXJ0aWZpY2F0ZSAvZXRjL2xldHNlbmNyeXB0L2xpdmUvYXBpLmFkdmVudHVyZS1zdG9yeS1nZW5lcmF0b3IueHl6L2Z1bGxjaGFpbi5wZW07CiAgICBzc2xfY2VydGlmaWNhdGVfa2V5IC9ldGMvbGV0c2VuY3J5cHQvbGl2ZS9hcGkuYWR2ZW50dXJlLXN0b3J5LWdlbmVyYXRvci54eXovcHJpdmtleS5wZW07CgogICAgc3NsX3Byb3RvY29scyBUTFN2MS4yIFRMU3YxLjM7CiAgICBzc2xfY2lwaGVycyBISUdIOiFhTlVMTDshTUQ1OwoKICAgIGxvY2F0aW9uIC8gewogICAgICAgIHByb3h5X3Bhc3MgaHR0cDovLzEyNy4wLjAuMTo4MDAwOwogICAgICAgIHByb3h5X3NldF9oZWFkZXIgSG9zdCAkaG9zdDsKICAgICAgICBwcm94eV9zZXRfaGVhZGVyIFgtUmVhbC1JUEQgJHJlbW90ZV9hZGRyOwogICAgICAgIHByb3h5X3NldF9oZWFkZXIgWC1Gb3J3YXJkZWQtRm9yICRwcm94eV9hZGRfeF9mb3J3YXJkZWRfZm9yOwogICAgICAgIHByb3h5X3NldF9oZWFkZXIgWC1Gb3J3YXJkZWQtUHJvdG8gJHNjaGVtZTsKICAgIH0KfQo="
+sudo printf 'server {
+    listen 443 ssl;
+    server_name api.adventure-story-generator.xyz;
 
-echo "$NGINX_CONF_B64" | base64 -d | sudo dd of=/etc/nginx/conf.d/ssl.conf status=none
+    ssl_certificate /etc/letsencrypt/live/api.adventure-story-generator.xyz/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/api.adventure-story-generator.xyz/privkey.pem;
+
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}' | sudo tee /etc/nginx/conf.d/ssl.conf
 
 # 3. Always restart Nginx to load the newly written SSL configurations
 echo "Restarting Nginx to load secure configurations..."
